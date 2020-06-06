@@ -1,32 +1,57 @@
-import * as React from 'react';
-import { Text, View, StyleSheet,TextInput, Button } from 'react-native';
-import Constants from 'expo-constants';
-import { Card } from 'react-native-paper';
-import Button from '@material-ui/core/Button';
+import * as React from "react";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import ResetPassword from "./components/ForgetPassword";
+import NewPassword from "./components/NewPassword";
+import Slides from "./components/SlidesFirstTime";
+import BottomTabs from "./components/BottomTabs";
+import SplashPage from "./components/SplashScreen";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import * as Font from "expo-font";
 
+const Stack = createStackNavigator();
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1,marginBottom:10 }}
-        />
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1,marginBottom:10 }}
-        />
-        <Button
-          title="Login in"
-        />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "white",
   },
-});
+};
+
+export default class App extends React.Component {
+  async componentDidMount() {
+    try {
+      await Font.loadAsync({
+        MontserratBold: require("./assets/fonts/Montserrat-Bold.otf"),
+        MontserratItalic: require("./assets/fonts/Montserrat-Italic.otf"),
+        MontserratLight: require("./assets/fonts/Montserrat-Light.otf"),
+        MontserratMedium: require("./assets/fonts/Montserrat-Medium.otf"),
+        MontserratRegular: require("./assets/fonts/Montserrat-Regular.otf"),
+      });
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
+  render() {
+    return (
+      <NavigationContainer theme={MyTheme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Splash" component={SplashPage} />
+          <Stack.Screen name="getStarted" component={Slides} />
+          <Stack.Screen name="login" component={Login} />
+          <Stack.Screen name="signup" component={SignUp} />
+          <Stack.Screen name="reset_password" component={ResetPassword} />
+          <Stack.Screen name="new_password" component={NewPassword} />
+          <Stack.Screen name="home" component={BottomTabs} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
